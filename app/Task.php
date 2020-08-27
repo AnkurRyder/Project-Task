@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class team extends Model
+class Task extends Model
 {
     protected $primaryKey = 'id';
     public $incrementing = false;
