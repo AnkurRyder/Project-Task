@@ -6,12 +6,20 @@ use Illuminate\Http\Request;
 use App\Member;
 use App\Task;
 use Ramsey\Uuid\Uuid;
-
+use Illuminate\Support\Facades\Validator;
 use function GuzzleHttp\Promise\task;
 
 class MemberController extends Controller
 {
     public function CreateMember($id, Request $request) {
+        $validatedData = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'required|email:rfc',
+        ]);
+        $errors = $validatedData->errors();
+        if($validatedData->failed()) {
+            return response()->json($errors->all(), 400);
+        }
         $uuid = Uuid::uuid4();
         $member = new Member;
         $member->id = $uuid->toString();
@@ -24,9 +32,10 @@ class MemberController extends Controller
 
     public function DeleteMember($id1, $id2) {
         if (MemberController::AllTaskDone($id2)) {
-            $member = Member::where(['id' => $id2, 'idt' => $id1])->get();
-            if($member == null)
-                return response("Check team ID", 400);
+            $member = Member::where(['id' => $id2, 'idt' => $id1]);
+            $count = Member::where(['id' => $id2, 'idt' => $id1])->count();
+            if($count == 0)
+                return response("Check ID", 400);
             $member->delete();
             return response('No Content', 204);
         }

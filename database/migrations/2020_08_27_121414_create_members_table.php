@@ -19,7 +19,7 @@ class CreateMembersTable extends Migration
             $table->string('idt');
             $table->foreign('idt')->references('id')->on('teams');
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();; // should be unique 
         });
     }
 

@@ -6,10 +6,25 @@ use App\Member;
 use App\Task;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
 {
     public function CreateTask($id, Request $request) {
+        $validatedData = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'description' => '',
+            'assignee_id' => 'UUID',
+            'status' => [
+                'required',
+                Rule::in(['todo', 'done']),
+            ],
+        ]);
+        $errors = $validatedData->errors();
+        if($validatedData->failed()) {
+            return response()->json($errors->all(), 400);
+        }
         $task = new Task();
         $uuid = Uuid::uuid4();
         $task->id = $uuid->toString();
@@ -17,7 +32,7 @@ class TaskController extends Controller
         $task->title = $request->input('title');
         $task->description = $request->input('description');
         $task->assignee_id = $request->input('assignee_id');
-        $task->status = $request->input('status');
+        $task->status = $request->input('status'); // Check validation
         if (TaskController::assignment($task) || $task->assignee_id == ''){
             $task->save();
             return response()->json($task);
@@ -33,6 +48,19 @@ class TaskController extends Controller
     }
 
     public function UpdateTask($id1, $id2, Request $request) {
+        $validatedData = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'description' => '',
+            'assignee_id' => 'UUID',
+            'status' => [
+                'required',
+                Rule::in(['todo', 'done']),
+            ],
+        ]);
+        $errors = $validatedData->errors();
+        if($validatedData->failed()) {
+            return response()->json($errors->all(), 400);
+        }
         $task = Task::where('id', $id2, 'AND', 'idt', $id1);
         $task->title = $request->input('title');
         $task->description = $request->input('description');
@@ -51,12 +79,12 @@ class TaskController extends Controller
     }
 
     public function ShowTasks($id1) {
-        $task = Task::where(['idt' => $id1])->get();
+        $task = Task::where(['idt' => $id1, 'status' => 'todo'])->get();
         return response()->json($task);
     }
 
     public function ShowMemberTask($id1, $id2) {
-        $task = Task::where(['assignee_id'=> $id2, 'idt' => $id1])->get();
+        $task = Task::where(['assignee_id'=> $id2, 'idt' => $id1, 'status' => 'todo'])->get();
         return response()->json($task);
     }
 }
