@@ -21,6 +21,7 @@ class CreateTasksTable extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('assignee_id')->nullable();
+            $table->foreign('assignee_id')->references('id')->on('members');
             $table->string('status');
         });
     }
