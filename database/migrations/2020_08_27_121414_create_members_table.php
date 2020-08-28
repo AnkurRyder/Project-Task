@@ -15,6 +15,9 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->string('id');
+            $table->primary('id');
+            $table->string('idt');
+            $table->foreign('idt')->references('id')->on('teams');
             $table->string('name');
             $table->string('email');
         });

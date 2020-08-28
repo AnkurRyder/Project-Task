@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Member;
+use App\team;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,21 +20,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::post('/teams', );
-
-Route::get('teams/:id', );
-
-Route::post('/teams/:id/member', );
-
-Route::delete('/teams/:id/members/:id2', );
-
-Route::post('/teams/:id/tasks', );
-
-Route::get('/teams/:id/tasks/:id2', );
-
-Route::patch('/teams/:id/tasks/:id2', );
-
-Route::get('/teams/:id/tasks/', );
-
-Route::get('/teams/:id/members/:id2/tasks/', );
