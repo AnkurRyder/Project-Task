@@ -12,9 +12,12 @@ use function GuzzleHttp\Promise\task;
 class MemberController extends Controller
 {
     public function CreateMember($id, Request $request) {
-        $validatedData = Validator::make($request->all(), [
+        $data = $request->all();
+        $data['id'] = $id;
+        $validatedData = Validator::make($data, [
             'name' => 'required|max:255',
             'email' => 'required|email:rfc',
+            'id' => 'UUID',
         ]);
         $errors = $validatedData->errors();
         if($validatedData->failed()) {
@@ -25,12 +28,29 @@ class MemberController extends Controller
         $member->id = $uuid->toString();
         $member->idt = $id;
         $member->name = $request->input('name');
-        $member->email = $request->input('email');
-        $member->save();
-        return response()->json($member);
+        $member->email = $request->input('email'); // Catch error if already existed
+        if(Member::where(['email' => $member->email])->count() == 0) {
+            try {
+                $member->save();
+              } catch (\Illuminate\Database\QueryException $e) {
+                return response()->json('Team ID does not exist', 400);
+              }
+            return response()->json($member);
+        }
+        return response()->json('Email already associated with a team member', 400);
     }
 
     public function DeleteMember($id1, $id2) {
+        $data['id1'] = $id1;
+        $data['id2'] = $id2;
+        $validatedData = Validator::make($data, [
+            'id1' => 'UUID',
+            'id2' => 'UUID',
+        ]);
+        $errors = $validatedData->errors();
+        if($validatedData->failed()) {
+            return response()->json($errors->all(), 400);
+        }
         if (MemberController::AllTaskDone($id2)) {
             $member = Member::where(['id' => $id2, 'idt' => $id1]);
             $count = Member::where(['id' => $id2, 'idt' => $id1])->count();

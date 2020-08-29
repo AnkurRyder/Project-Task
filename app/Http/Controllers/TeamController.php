@@ -11,7 +11,7 @@ class TeamController extends Controller
 {
     public function CreateTeam(Request $request) {
         $validatedData = Validator::make($request->all(), [
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|alpha_dash',
         ]);
         $errors = $validatedData->errors();
         if($validatedData->failed()) {
@@ -27,7 +27,15 @@ class TeamController extends Controller
 
     public function Show($id)
     {
-        $team = team::find($id)->get();
+        $data['id'] = $id;
+        $validatedData = Validator::make($data, [
+            'id' => 'UUID',
+        ]);
+        $errors = $validatedData->errors();
+        if($validatedData->failed()) {
+            return response()->json($errors->all(), 400);
+        }
+        $team = team::find($id);
         return response()->json($team);
     }
 }
