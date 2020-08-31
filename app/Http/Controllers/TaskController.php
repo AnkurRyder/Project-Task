@@ -28,9 +28,10 @@ class TaskController extends Controller
         if($validatedData->failed()) {
             return response()->json($errors->all(), 400);
         }
+        $assignee_id = $request->input('assignee_id');
         $task = new Task();
         $uuid = Uuid::uuid4();
-        if ($task$task->() |task->assignee_id == ''){
+        if ($task->assignment($id, $assignee_id) || $assignee_id == ''){
             try {
                 $task->Create($uuid->toString(), $id, $request->input('title'), $request->input('description'), $request->input('assignee_id'), $request->input('status'));
             } catch (\Illuminate\Database\QueryException $e) {
@@ -61,7 +62,7 @@ class TaskController extends Controller
             return response()->json($errors->all(), 400);
         }
         $task = Task::where(['id' => $id2, 'idt' => $id1])->get()->first();
-        if ($task->assignment() || $task->assignee_id == ''){
+        if ($task->assignment($id1, $task->assignee_id) || $task->assignee_id == ''){
             try {
                 $task->Change($request->input('title'), $request->input('description'), $request->input('assignee_id'), $request->input('status'));
               } catch (\Illuminate\Database\QueryException $e) {

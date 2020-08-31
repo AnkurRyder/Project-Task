@@ -21,8 +21,8 @@ class Task extends Model
         $this->save();
     }
 
-    public function assignment(){
-        $count = Member::where(['id' => $this->assignee_id, 'idt' => $this->idt])->count();
+    public function assignment($idt, $assignee_id){
+        $count = Member::where(['id' => $assignee_id, 'idt' => $idt])->count();
         if ($count == 0)
             return false;
         return true;
