@@ -113,11 +113,11 @@ class TaskController extends Controller
         if($validatedData->failed()) {
             return response()->json($errors->all(), 400);
         }
-        $task = Task::where(['idt' => $id1, 'status' => 'todo'])->get();
+        $task = Task::where(['idt' => $id1, 'status' => 'todo'])->simplePaginate(5);
         return response()->json($task);
     }
 
-    public function ShowMemberTask($id1, $id2) {
+    public function ShowMemberTasks($id1, $id2) {
         $data['id1'] = $id1;
         $data['id2'] = $id2;
         $validatedData = Validator::make($data, [
@@ -128,7 +128,7 @@ class TaskController extends Controller
         if($validatedData->failed()) {
             return response()->json($errors->all(), 400);
         }
-        $task = Task::where(['assignee_id'=> $id2, 'idt' => $id1, 'status' => 'todo'])->get();
+        $task = Task::where(['assignee_id'=> $id2, 'idt' => $id1, 'status' => 'todo'])->simplePaginate(5);
         return response()->json($task);
     }
 }
