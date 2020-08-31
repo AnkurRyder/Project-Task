@@ -1,61 +1,150 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Project Task
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Tech Stack
 
-## About Laravel
+- Laravel
+- Mysql
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## API Services
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- GET
+- POST
+- PATCH
+- DELETE
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### API Endpoint localhost:8000
 
-## Learning Laravel
+## Functions Example
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+``` json
+POST /teams
+request:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+{
+  "name":”Platform”,
+}
 
-## Laravel Sponsors
+response:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+{
+  "id":"b7f32a21-b863-4dd1-bd86-e99e8961ffc6",
+  "name”: “Platform”,
+}
+```
 
-### Premium Partners
+```json
+GET /teams/:id
+response:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+{
+  "id":"b7f32a21-b863-4dd1-bd86-e99e8961ffc6",
+  "name”: “Platform”
+}
+```
 
-## Contributing
+``` json
+POST /teams/:id/member
+request:
+{
+    "name": "Vv",
+    "email": "venkat.v@razorpay.com"
+}
+Response:
+{
+    "id": "b7f32a21-b863-4dd1-bd86-e99e8961ffc6",
+    "name": "Vv",
+    "email": "venkat.v@razorpay.com"
+}
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```json
+DELETE /teams/:id/members/:id2
 
-## Code of Conduct
+response:
+HTTP 204 No Content
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```json
+POST /teams/:id/tasks
+request:
+{
+    "title": "Deploy app on stage", //mandatory
+    "description" : "We have built a new app which needs to be tested thoroughly", //optional
+    "assignee_id": "some member id from the same team", // optional
+    "status": "todo"
+}
+response:
+{
+    "id": "2a913e52-81ea-4987-874d-820969a62ea6",
+    "title": "Deploy app on stage", //mandatory
+    "description" : "We have built a new app which needs to be tested thoroughly", //optional
+    "assignee_id": "some member id from the same team", // optional
+    "status": "todo"
+}
+```
 
-## Security Vulnerabilities
+``` json
+GET /teams/:id/tasks/:id2
+response:
+{
+    "id": "2a913e52-81ea-4987-874d-820969a62ea6",
+    "title": "Deploy app on stage", //mandatory
+    "description" : "We have built a new app which needs to be tested thoroughly", //optional
+    "assignee_id": "some member id from the same team", // optional
+    "status": "todo"
+}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+``` json
+PATCH /teams/:id/tasks/:id2
+request:
+{
+    "title": "Deploy app on preprod",//optional
+    "description":"new description",//optional
+    "assignee_id": "745dbe00-2520-420a-985d-0c3f5d280e57",//optional
+    "status": "done"
+}
+response:
+{
+    "id": "2a913e52-81ea-4987-874d-820969a62ea6",
+    "title": "Deploy app on preprod",//optional
+    "description":"new description",//optional
+    "assignee_id": "745dbe00-2520-420a-985d-0c3f5d280e57",
+    "status": "done"
+}
+```
 
-## License
+``` json
+GET /teams/:id/tasks/
+response:
+[
+    {
+        "id": "2a913e52-81ea-4987-874d-820969a62ea6",
+        "title": "Deploy app on preprod",//optional
+        "description":"new description",//optional
+        "assignee_id": "745dbe00-2520-420a-985d-0c3f5d280e57",
+        "status": "todo"
+    },
+]
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+
+``` json
+GET /teams/:id/members/:id2/tasks/
+response:
+[
+    {
+        "id": "2a913e52-81ea-4987-874d-820969a62ea6",
+        "title": "Deploy app on preprod",//optional
+        "description":"new description",//optional
+        "assignee_id": "745dbe00-2520-420a-985d-0c3f5d280e57",
+        "status": "todo"
+    },
+]
+```
+
+## To Run locally
+
+`$ php artisan serve`
+
+## **Attention**: Before running the API locally edit the env file, add Database username and password
