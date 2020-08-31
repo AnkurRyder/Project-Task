@@ -10,4 +10,10 @@ class team extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
+
+    public function Create(string $id, string $name) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->save();
+    }
 }

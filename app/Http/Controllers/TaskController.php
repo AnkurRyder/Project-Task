@@ -30,28 +30,15 @@ class TaskController extends Controller
         }
         $task = new Task();
         $uuid = Uuid::uuid4();
-        $task->id = $uuid->toString();
-        $task->idt = $id;
-        $task->title = $request->input('title');
-        $task->description = $request->input('description');
-        $task->assignee_id = $request->input('assignee_id');
-        $task->status = $request->input('status');
-        if (TaskController::assignment($task) || $task->assignee_id == ''){
+        if ($task$task->() |task->assignee_id == ''){
             try {
-                $task->save();
-              } catch (\Illuminate\Database\QueryException $e) {
+                $task->Create($uuid->toString(), $id, $request->input('title'), $request->input('description'), $request->input('assignee_id'), $request->input('status'));
+            } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json('Team ID does not exist', 400);
-              }
+            }
             return response()->json($task);
         }
         return response('assignee_id should belong to the same team as the task', 400);
-    }
-
-    public static function assignment(Task $task){
-        $count = Member::where(['id' => $task->assignee_id, 'idt' => $task->idt])->count();
-        if ($count == 0)
-            return false;
-        return true;
     }
 
     public function UpdateTask($id1, $id2, Request $request) {
@@ -74,13 +61,9 @@ class TaskController extends Controller
             return response()->json($errors->all(), 400);
         }
         $task = Task::where(['id' => $id2, 'idt' => $id1])->get()->first();
-        $task->title = $request->input('title');
-        $task->description = $request->input('description');
-        $task->assignee_id = $request->input('assignee_id');
-        $task->status = $request->input('status');
-        if (TaskController::assignment($task) || $task->assignee_id == ''){
+        if ($task->assignment() || $task->assignee_id == ''){
             try {
-                $task->save();
+                $task->Change($request->input('title'), $request->input('description'), $request->input('assignee_id'), $request->input('status'));
               } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json('Team ID does not exist', 400);
               }

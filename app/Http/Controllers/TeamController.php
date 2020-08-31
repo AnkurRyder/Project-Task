@@ -19,10 +19,8 @@ class TeamController extends Controller
         }
         $uuid = Uuid::uuid4();
         $team = new team;
-        $team->id = $uuid->toString();
-        $team->name = $request->input('name');
-        $team->save();
-        return response()->json(['id' => $team->id, 'name' => $team->name]);;
+        $team->Create($uuid->toString(),$request->input('name'));
+        return response()->json($team);;
     }
 
     public function Show($id)

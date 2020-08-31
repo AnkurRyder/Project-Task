@@ -25,16 +25,12 @@ class MemberController extends Controller
         }
         $uuid = Uuid::uuid4();
         $member = new Member;
-        $member->id = $uuid->toString();
-        $member->idt = $id;
-        $member->name = $request->input('name');
-        $member->email = $request->input('email'); // Catch error if already existed
         if(Member::where(['email' => $member->email])->count() == 0) {
             try {
-                $member->save();
-              } catch (\Illuminate\Database\QueryException $e) {
+                $member->Create($uuid->toString(), $id, $request->input('name'),$request->input('email') );
+            } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json('Team ID does not exist', 400);
-              }
+            }
             return response()->json($member);
         }
         return response()->json('Email already associated with a team member', 400);
@@ -53,7 +49,7 @@ class MemberController extends Controller
         }
         if (MemberController::AllTaskDone($id2)) {
             $member = Member::where(['id' => $id2, 'idt' => $id1]);
-            $count = Member::where(['id' => $id2, 'idt' => $id1])->count();
+            $count = $member->count();
             if($count == 0)
                 return response("Check ID", 400);
             $member->delete();

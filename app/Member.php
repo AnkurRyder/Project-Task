@@ -10,4 +10,12 @@ class Member extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
+
+    public function Create($id, $idt, $name, $email) {
+        $this->id = $id;
+        $this->idt = $idt;
+        $this->name = $name;
+        $this->email = $email;
+        $this->save();
+    }
 }
