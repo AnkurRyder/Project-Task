@@ -145,6 +145,12 @@ response:
 
 ## To Run locally
 
+`$ php artisan migrate`
+
 `$ php artisan serve`
 
-## **Attention**: Before running the API locally edit the env file, add Database username and password
+## To Run on docker
+
+`$ docker-compose up --build`
+
+## **Attention**: Before running the API edit the env file, add Database username and password
