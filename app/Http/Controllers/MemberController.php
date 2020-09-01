@@ -31,7 +31,7 @@ class MemberController extends Controller
             } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json('Team ID does not exist', 400);
             }
-            return response()->json($member);
+            return response()->json([ $member->id, $member->name, $member->email]);
         }
         return response()->json('Email already associated with a team member', 400);
     }

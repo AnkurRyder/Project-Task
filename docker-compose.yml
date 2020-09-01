@@ -20,5 +20,3 @@ services:
       - MYSQL_DATABASE=task-manager
       - MYSQL_USER=root
       - MYSQL_PASSWORD=pass
-    ports:
-      - "3306:3306"

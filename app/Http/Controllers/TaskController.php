@@ -68,7 +68,7 @@ class TaskController extends Controller
               } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json('Team ID does not exist', 400);
               }
-            return response()->json($task);
+            return response()->json([$task->id, $task->title, $task->description, $task->assignee_id, $task->status]);
         }
         return response('assignee_id should belong to the same team as the task', 400);
     }
@@ -85,7 +85,7 @@ class TaskController extends Controller
             return response()->json($errors->all(), 400);
         }
         $task = Task::where(['id' => $id2, 'idt' => $id1])->get();
-        return response()->json($task);
+        return response()->json([$task->id, $task->title, $task->description, $task->assignee_id, $task->status]);
     }
 
     public function ShowTasks($id1) {
